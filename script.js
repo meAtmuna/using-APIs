@@ -1,4 +1,5 @@
 const background = document.getElementById("background");
+const time = document.getElementById("time");
 
 
 async function getBackground() {
@@ -37,3 +38,35 @@ window.onload = function () {
         }
     });
 };
+
+
+function updateTime() {
+    const dateObject = new Date();
+
+    let ms = dateObject.getTime();
+    let offset = dateObject.getTimezoneOffset() * 60 * 1000;
+    ms = ms - offset;
+
+    let msInDay = 24 * 60 * 60 * 1000;
+    let currentMs = ms % msInDay;
+
+    let hours = Math.floor(currentMs / (1000 * 60 * 60));
+
+    let minutes = Math.floor(
+        (currentMs % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    
+    let seconds = Math.floor(
+        (currentMs % (1000 * 60)) / 1000
+    );
+
+    // console.log(ms);
+    // console.log(offset);
+    // console.log(hours, minutes, seconds);
+    
+    time.innerText = `${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(() => {
+    updateTime();
+}, 1000);
