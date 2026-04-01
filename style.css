@@ -9,6 +9,7 @@
     height: 100vh;
     background-position: center;
     background-size: cover;
+    text-align: right;
 }
 
 p{
@@ -31,4 +32,9 @@ p{
     border: 1px solid rgba(255, 255, 255, 0.3);
     display: inline-block;
     margin: 5vw;
+}
+
+#weather{
+    font-size: 5vh;
+    margin: 1vw;
 }

@@ -1,5 +1,6 @@
 const background = document.getElementById("background");
 const time = document.getElementById("time");
+const weather = document.getElementById("weather");
 
 
 async function getBackground() {
@@ -70,3 +71,33 @@ function updateTime() {
 setInterval(() => {
     updateTime();
 }, 1000);
+
+async function getWeather(lat, lon) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`;
+
+    try {
+        const response = await fetch(url);
+        const result =  await response.json();
+
+        return result;
+
+    } catch (error) {
+        console.log("weather API error", error);
+
+        return null;
+    }
+}
+
+navigator.geolocation.getCurrentPosition((position) => {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    getWeather(lat, lon).then((data) => {
+        if (!data) return;
+
+        const temp = data.current_weather.temperature;
+        const wind = data.current_weather.windspeed;
+
+        weather.innerText = `${temp}°C ${wind} km/h`;
+    })
+});
