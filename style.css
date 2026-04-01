@@ -9,8 +9,41 @@
     height: 100vh;
     background-position: center;
     background-size: cover;
-    text-align: right;
+    display: flex;
+    flex-direction: column;
 }
+
+.top{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#date{
+    padding: 10px 20px;
+    font-size: 4vh;
+    color: white;
+}
+
+.main{
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5vw;
+}
+
+.left{
+    display: flex;
+    align-items: center;
+}
+
+.right{
+    display: flex;
+    justify-content: flex-end;
+    max-width: 40%;
+}
+
 
 p{
     color: white;
@@ -20,7 +53,7 @@ p{
 
 #time{
     font-size: 15vh;
-    margin: 1vw;
+    letter-spacing: 3px;
 }
 
 .gloss{
@@ -30,11 +63,20 @@ p{
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
-    display: inline-block;
-    margin: 5vw;
+    padding: 4vh;
 }
 
 #weather{
     font-size: 5vh;
-    margin: 1vw;
+}
+
+h1{
+    margin-bottom: 10px;
+    color: white;
+    font-size: 3vh;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+#quote{
+    font-size: 5vh;
 }

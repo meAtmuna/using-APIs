@@ -1,6 +1,8 @@
 const background = document.getElementById("background");
 const time = document.getElementById("time");
 const weather = document.getElementById("weather");
+const quote = document.getElementById("quote");
+const date = document.getElementById("date");
 
 
 async function getBackground() {
@@ -101,3 +103,32 @@ navigator.geolocation.getCurrentPosition((position) => {
         weather.innerText = `${temp}°C ${wind} km/h`;
     })
 });
+
+
+fetch("https://dummyjson.com/quotes/random")
+    .then(response => response.json())
+    .then(data => {
+
+        quote.innerText = data.quote;
+        console.log(data);
+    })
+    .catch(error =>{
+        console.log("Quote API error", error);
+        
+    })
+
+function updateDate() {
+    const datehere = new Date();
+
+    const options = {
+        weekday: "long",
+        day:"numeric",
+        month: "long",
+        year: "numeric"
+    }
+
+    const formateDate = datehere.toLocaleDateString("en-us", options);
+    date.innerText = formateDate;
+}
+
+updateDate();
