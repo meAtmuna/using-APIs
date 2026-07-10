@@ -30,3 +30,6 @@ Allow location permission to see weather
 * How to handle JSON data
 * How to update UI dynamically
 * Working with time and date in javaScript
+
+## Screenshot
+![screenshot](screenshot.png)
