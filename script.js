@@ -4,6 +4,7 @@ const weather = document.getElementById("weather");
 const quote = document.getElementById("quote");
 const date = document.getElementById("date");
 
+const fallbackImage = "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1600";
 
 async function getBackground() {
     const url = "https://api.nasa.gov/planetary/apod?api_key=l9vBqzGa1P0bQHfSQEuLM4jpxj2vhxx36EYcPaq8";
@@ -17,31 +18,56 @@ async function getBackground() {
         const result = await response.json();
         console.log(result);
         
-        if (result.media_type !== "image") {
-            console.log("APOD returned a non-image media type.");
-            return null
+        if (result.media_type !== "image" || result.url.includes("logo")) {
+            console.log("APOD is not a real image, using backup.");
+            return await getBackupImage()
         }
 
         return result.url;
 
     } catch (error) {
         console.log("Error ===>", error);
-        return null;
+        return await getBackupImage();
     }
 }
 
-window.onload = function () {
-    getBackground().then(function (imageUrl) {
-        if (!imageUrl) return;
+async function getBackupImage() {
+    const url = "https://images-api.nasa.gov/search?q=galaxy&media_type=image";
 
-        console.log(imageUrl);
-        
-        if (background) {
-            background.style.backgroundImage = `url('${imageUrl}')`;
-        }
-    });
-};
+    try {
+        const response =  await fetch(url)
+        const result =await response.json()
 
+        const items = result.collection.items
+        const randomNumber = Math.floor(Math.random() * items.length)
+
+        return items[randomNumber].links[0].href
+    } catch (error) {
+        console.log("Backup NASA API error", error);
+        return null
+    }
+}
+function setBackground(imageUrl) {
+    const img = new Image()
+
+    img.onload = function () {            
+        background.style.backgroundImage = `url('${imageUrl}')`;
+    };
+
+    img.onerror = function (){
+        console.log("Image failed to load, using fallback");
+    }
+    img.src = imageUrl
+}    
+
+background.style.backgroundImage = `url('${fallbackImage}')`;
+
+getBackground().then(function (imageUrl) {
+    if (!imageUrl) return;
+
+    console.log(imageUrl);
+    setBackground(imageUrl)
+});
 
 function updateTime() {
     const dateObject = new Date();
@@ -90,19 +116,25 @@ async function getWeather(lat, lon) {
     }
 }
 
-navigator.geolocation.getCurrentPosition((position) => {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude;
-
+function loadWeather(lat, lon) {
     getWeather(lat, lon).then((data) => {
         if (!data) return;
-
+    
         const temp = data.current_weather.temperature;
         const wind = data.current_weather.windspeed;
-
+    
         weather.innerText = `${temp}°C ${wind} km/h`;
     })
-});
+    
+}
+
+navigator.geolocation.getCurrentPosition((position) => {
+    loadWeather (position.coords.latitude, position.coords.longitude)
+    },
+    () => {
+        loadWeather(24.86, 67.01);
+    }
+);
 
 
 fetch("https://dummyjson.com/quotes/random")
